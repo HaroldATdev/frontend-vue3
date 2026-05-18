@@ -1,6 +1,7 @@
-import { defineStore } from 'pinia'
+﻿import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { authService } from '@/services/authService'
+import http from '@/api/http'
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('token') || null)
@@ -10,10 +11,17 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function login(credentials) {
     const { data } = await authService.login(credentials)
-    const payload = data.data || data
-    token.value = payload.token
+    const payload = data?.data ?? data ?? {}
+    const tokenValue = String(payload.token ?? payload.access_token ?? '').trim()
+
+    if (!tokenValue || tokenValue === 'undefined' || tokenValue === 'null') {
+      throw new Error('No se recibio un token valido en login.')
+    }
+
+    token.value = tokenValue
     user.value = payload.user || null
-    localStorage.setItem('token', payload.token)
+    localStorage.setItem('token', tokenValue)
+    http.defaults.headers.common.Authorization = `Bearer ${tokenValue}`
   }
 
   async function logout() {
@@ -23,6 +31,7 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = null
       user.value = null
       localStorage.removeItem('token')
+      delete http.defaults.headers.common.Authorization
     }
   }
 

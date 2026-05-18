@@ -1,4 +1,4 @@
-import axios from 'axios'
+﻿import axios from 'axios'
 
 const http = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080/api',
@@ -8,10 +8,12 @@ const http = axios.create({
   }
 })
 
-// Adjunta el token JWT en cada petición
+// Adjunta el token Bearer en cada peticion si existe y es valido.
 http.interceptors.request.use(config => {
-  const token = localStorage.getItem('token')
-  if (token) config.headers.Authorization = `Bearer ${token}`
+  const token = String(localStorage.getItem('token') || '').trim()
+  if (token && token !== 'undefined' && token !== 'null') {
+    config.headers.Authorization = `Bearer ${token}`
+  }
   return config
 })
 
@@ -20,31 +22,31 @@ http.interceptors.response.use(
   response => response,
   error => {
     if (!error.response) {
-      return Promise.reject({ message: 'Error de red. Verifica tu conexión.', status: 0 })
+      return Promise.reject({ message: 'Error de red. Verifica tu conexion.', status: 0 })
     }
 
     const { status, data } = error.response
 
     if (status === 401) {
       localStorage.removeItem('token')
-      // Importación dinámica para evitar dependencia circular con router
+      // Importacion dinamica para evitar dependencia circular con router
       import('@/router').then(({ default: router }) => router.push('/login'))
-      return Promise.reject({ message: 'Sesión expirada. Inicia sesión nuevamente.', status })
+      return Promise.reject({ message: 'Sesion expirada. Inicia sesion nuevamente.', status })
     }
 
     if (status === 403) {
-      return Promise.reject({ message: 'No tienes permisos para realizar esta acción.', status })
+      return Promise.reject({ message: 'No tienes permisos para realizar esta accion.', status })
     }
 
     if (status === 422) {
       const errors = data.errors
         ? Object.values(data.errors).flat().join(' ')
-        : data.message || 'Error de validación.'
+        : data.message || 'Error de validacion.'
       return Promise.reject({ message: errors, status, errors: data.errors })
     }
 
     if (status === 500) {
-      return Promise.reject({ message: 'Error interno del servidor. Intenta más tarde.', status })
+      return Promise.reject({ message: 'Error interno del servidor. Intenta mas tarde.', status })
     }
 
     return Promise.reject({ message: data?.message || `Error ${status}`, status })
