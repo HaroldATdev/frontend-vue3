@@ -13,6 +13,9 @@ http.interceptors.request.use(config => {
   const token = String(localStorage.getItem('token') || '').trim()
   if (token && token !== 'undefined' && token !== 'null') {
     config.headers.Authorization = `Bearer ${token}`
+  } else {
+    delete config.headers.Authorization
+    delete config.headers.authorization
   }
   return config
 })

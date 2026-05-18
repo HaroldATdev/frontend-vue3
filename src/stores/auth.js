@@ -4,6 +4,12 @@ import { authService } from '@/services/authService'
 import http from '@/api/http'
 
 export const useAuthStore = defineStore('auth', () => {
+  // Limpiar tokens inválidos que puedan haber quedado de sesiones anteriores
+  const storedToken = localStorage.getItem('token')
+  if (!storedToken || storedToken === 'undefined' || storedToken === 'null') {
+    localStorage.removeItem('token')
+  }
+
   const token = ref(localStorage.getItem('token') || null)
   const user = ref(null)
 
