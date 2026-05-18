@@ -10,19 +10,19 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
           <p class="text-sm text-gray-500 mb-1">Productos</p>
-          <p class="text-3xl font-bold text-indigo-600">{{ summary.products_count ?? summary.products ?? '—' }}</p>
+          <p class="text-3xl font-bold text-indigo-600">{{ summary.stats?.total_products ?? '—' }}</p>
         </div>
         <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
           <p class="text-sm text-gray-500 mb-1">Categorías</p>
-          <p class="text-3xl font-bold text-green-600">{{ summary.categories_count ?? summary.categories ?? '—' }}</p>
+          <p class="text-3xl font-bold text-green-600">{{ summary.stats?.total_categories ?? '—' }}</p>
         </div>
         <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
           <p class="text-sm text-gray-500 mb-1">Bajo stock</p>
-          <p class="text-3xl font-bold text-yellow-600">{{ lowStockCount }}</p>
+          <p class="text-3xl font-bold text-yellow-600">{{ summary.stats?.low_stock_count ?? '—' }}</p>
         </div>
         <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
           <p class="text-sm text-gray-500 mb-1">Total movimientos</p>
-          <p class="text-3xl font-bold text-purple-600">{{ summary.movements_count ?? '—' }}</p>
+          <p class="text-3xl font-bold text-purple-600">{{ summary.stats?.total_movements ?? '—' }}</p>
         </div>
       </div>
 
@@ -99,7 +99,6 @@ const summary = ref(null)
 const lowStockProducts = computed(() =>
   Array.isArray(summary.value?.low_stock) ? summary.value.low_stock : []
 )
-const lowStockCount = computed(() => lowStockProducts.value.length)
 const lastMovements = computed(() =>
   Array.isArray(summary.value?.last_movements) ? summary.value.last_movements : []
 )
