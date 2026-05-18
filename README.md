@@ -19,7 +19,7 @@ El `docker-compose.yml` principal está en el repositorio del backend e incluye 
 
 ```bash
 # 1. Clonar ambos repositorios como carpetas hermanas
-git clone https://github.com/HaroldATdev/backend-laravel11.git backend-laravel
+git clone https://github.com/HaroldATdev/backend-laravel11.git backend-laravel11
 git clone https://github.com/HaroldATdev/frontend-vue3.git frontend-vue3
 
 # 2. Configurar el entorno del backend
