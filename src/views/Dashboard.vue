@@ -32,7 +32,7 @@
           <span class="text-yellow-500">⚠</span>
           <h2 class="font-semibold text-yellow-700">Productos con bajo stock</h2>
         </div>
-        <ul class="divide-y divide-gray-100">
+        <ul class="divide-y divide-gray-100 max-h-72 overflow-y-auto">
           <li
             v-for="p in lowStockProducts"
             :key="p.id"
@@ -51,7 +51,7 @@
         <div class="px-5 py-3 border-b border-gray-100">
           <h2 class="font-semibold text-gray-700">Últimos movimientos</h2>
         </div>
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto max-h-96 overflow-y-auto">
           <table class="w-full text-sm">
             <thead class="bg-gray-50 text-gray-500 uppercase text-xs">
               <tr>
