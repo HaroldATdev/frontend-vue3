@@ -18,14 +18,14 @@ Repositorio frontend de la evaluación técnica Full Stack. Migrado desde Vue 2 
 El `docker-compose.yml` principal está en el repositorio del backend e incluye todos los servicios.
 
 ```bash
-# 1. Clonar ambos repositorios como carpetas hermanas
+# 1. Clonar ambos repositorios como carpetas hermanas (los nombres importan)
 git clone https://github.com/HaroldATdev/backend-laravel11.git backend-laravel11
 git clone https://github.com/HaroldATdev/frontend-vue3.git frontend-vue3
 
 # 2. Configurar el entorno del backend
-cd backend-laravel
+cd backend-laravel11
 cp .env.example .env
-# El .env.example ya incluye FRONTEND_PATH=../frontend-vue3
+# FRONTEND_PATH=../frontend-vue3 ya está en .env.example — no cambiar el nombre de las carpetas
 
 # 3. Levantar todo (backend + nginx + MySQL + frontend)
 docker compose up -d --build
