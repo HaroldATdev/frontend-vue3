@@ -21,7 +21,17 @@ export const useProductsStore = defineStore('products', () => {
     loading.value = true
     error.value = ''
     try {
-      const { data } = await productService.list({ ...filters.value, page })
+      // Clean empty filter values before sending to API
+      const params = { page }
+      if (filters.value.q) params.q = filters.value.q
+      if (filters.value.category_id) params.category_id = filters.value.category_id
+      if (filters.value.status !== '') params.status = filters.value.status
+      if (filters.value.min_price) params.min_price = filters.value.min_price
+      if (filters.value.max_price) params.max_price = filters.value.max_price
+      params.sort_by = filters.value.sort_by
+      params.sort_dir = filters.value.sort_dir
+
+      const { data } = await productService.list(params)
       // Unwrap nested response: { success, data: { data: [...], meta: {...} } }
       const payload = data.data || data
       products.value = Array.isArray(payload.data) ? payload.data : Array.isArray(payload) ? payload : []
