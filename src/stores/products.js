@@ -22,12 +22,14 @@ export const useProductsStore = defineStore('products', () => {
     error.value = ''
     try {
       const { data } = await productService.list({ ...filters.value, page })
-      products.value = data.data
+      // Unwrap nested response: { success, data: { data: [...], meta: {...} } }
+      const payload = data.data || data
+      products.value = Array.isArray(payload.data) ? payload.data : Array.isArray(payload) ? payload : []
       pagination.value = {
-        current_page: data.current_page,
-        last_page: data.last_page,
-        total: data.total,
-        per_page: data.per_page
+        current_page: payload.meta?.current_page ?? 1,
+        last_page: payload.meta?.last_page ?? 1,
+        total: payload.meta?.total ?? 0,
+        per_page: payload.meta?.per_page ?? 15
       }
     } catch (err) {
       error.value = err.message

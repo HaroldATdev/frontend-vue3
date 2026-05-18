@@ -188,7 +188,8 @@ onMounted(async () => {
   ])
   if (catRes.status === 'fulfilled') {
     const d = catRes.value.data
-    categories.value = d.data || d.categories || d
+    const payload = d.data || d
+    categories.value = Array.isArray(payload.data) ? payload.data : Array.isArray(payload) ? payload : []
   }
 })
 

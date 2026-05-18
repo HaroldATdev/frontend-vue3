@@ -13,8 +13,9 @@ export const useCategoriesStore = defineStore('categories', () => {
     error.value = ''
     try {
       const { data } = await categoryService.list(params)
-      // Compatibilidad con distintas estructuras de respuesta del backend
-      categories.value = data.data || data.categories || data
+      // Unwrap nested response: { success, data: { data: [...], meta: {...} } }
+      const payload = data.data || data
+      categories.value = Array.isArray(payload.data) ? payload.data : Array.isArray(payload) ? payload : []
     } catch (err) {
       error.value = err.message
     } finally {
