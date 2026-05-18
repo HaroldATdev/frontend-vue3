@@ -189,25 +189,26 @@ function validate() {
 }
 
 onMounted(async () => {
-  const [catRes] = await Promise.allSettled([categoryService.list()])
-  if (catRes.status === 'fulfilled') {
-    const d = catRes.value.data
+  try {
+    // Load categories first
+    const catRes = await categoryService.list()
+    const d = catRes.data
     const payload = d.data || d
     categories.value = Array.isArray(payload.data) ? payload.data : Array.isArray(payload) ? payload : []
-  }
-  if (isEdit.value) {
-    try {
+
+    // Then load product data if editing
+    if (isEdit.value) {
       const { data } = await productService.get(route.params.id)
       const p = data.data || data
       form.name = p.name
       form.description = p.description || ''
       form.price = p.price
       form.stock = p.stock
-      form.category_id = p.category_id
-      form.status = p.status
-    } catch (err) {
-      error.value = 'No se pudo cargar el producto'
+      form.category_id = Number(p.category_id)
+      form.status = Number(p.status)
     }
+  } catch (err) {
+    error.value = err.message || 'No se pudo cargar los datos'
   }
 })
 
