@@ -11,29 +11,41 @@ Repositorio frontend de la evaluación técnica Full Stack. Migrado desde Vue 2 
 
 ---
 
-## Levantar con Docker (recomendado)
+## Levantar con Docker
 
-El frontend **se levanta automáticamente** desde el `docker-compose.yml` del repositorio backend.
+### Opción A — Stack completo (backend + MySQL + frontend) ✅ Recomendado para evaluación
 
-### Pasos
+El `docker-compose.yml` principal está en el repositorio del backend e incluye todos los servicios.
 
 ```bash
 # 1. Clonar ambos repositorios como carpetas hermanas
-git clone <url-backend> backend-laravel
-git clone <url-frontend> frontend-vue3   # este repo
+git clone https://github.com/HaroldATdev/backend-laravel11.git backend-laravel
+git clone https://github.com/HaroldATdev/frontend-vue3.git frontend-vue3
 
-# 2. Entrar al backend y configurar el entorno
+# 2. Configurar el entorno del backend
 cd backend-laravel
 cp .env.example .env
-# Verificar que FRONTEND_PATH=../frontend-vue3 coincida con el nombre de carpeta
+# El .env.example ya incluye FRONTEND_PATH=../frontend-vue3
 
-# 3. Levantar todo (backend + nginx + mysql + frontend)
+# 3. Levantar todo (backend + nginx + MySQL + frontend)
 docker compose up -d --build
 
 # 4. Ejecutar migraciones y seeders
 docker compose exec backend php artisan key:generate
 docker compose exec backend php artisan migrate --seed
 ```
+
+### Opción B — Solo el frontend (requiere backend corriendo por separado)
+
+Este repositorio incluye su propio `docker-compose.yml` para levantar únicamente el frontend:
+
+```bash
+git clone https://github.com/HaroldATdev/frontend-vue3.git frontend-vue3
+cd frontend-vue3
+docker compose up
+```
+
+> El frontend estará disponible en http://localhost:5173 y apuntará al backend en http://localhost:8080/api.
 
 ### URLs disponibles
 

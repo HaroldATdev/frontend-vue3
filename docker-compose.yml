@@ -1,0 +1,21 @@
+# docker-compose para levantar SOLO el frontend en modo desarrollo.
+# Para levantar el stack completo (backend + MySQL + frontend), usa el
+# docker-compose.yml del repositorio backend:
+#   https://github.com/HaroldATdev/backend-laravel11
+
+services:
+  frontend:
+    image: node:20-alpine
+    container_name: inventory_frontend
+    working_dir: /app
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    command: sh -c "npm ci && npm run dev"
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=${VITE_API_URL:-http://localhost:8080/api}
+
+volumes:
+  node_modules:
