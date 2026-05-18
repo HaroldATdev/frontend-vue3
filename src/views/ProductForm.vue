@@ -192,7 +192,8 @@ onMounted(async () => {
   const [catRes] = await Promise.allSettled([categoryService.list()])
   if (catRes.status === 'fulfilled') {
     const d = catRes.value.data
-    categories.value = d.data || d.categories || d
+    const payload = d.data || d
+    categories.value = Array.isArray(payload.data) ? payload.data : Array.isArray(payload) ? payload : []
   }
   if (isEdit.value) {
     try {
