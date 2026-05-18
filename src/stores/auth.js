@@ -10,9 +10,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function login(credentials) {
     const { data } = await authService.login(credentials)
-    token.value = data.token
-    user.value = data.user || null
-    localStorage.setItem('token', data.token)
+    const payload = data.data || data
+    token.value = payload.token
+    user.value = payload.user || null
+    localStorage.setItem('token', payload.token)
   }
 
   async function logout() {
